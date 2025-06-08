@@ -4,7 +4,7 @@ const searchBox=document.querySelector(".search input")
 const searchBtn=document.querySelector(".search button")
 const weatherIcon=document.querySelector(".weather-icon")
 
-async function checkWheather(city){
+async function checkWeather(city){
     const response=await fetch(apiUrl + city + `&appid=${apiKey}`);
 
     if(response.status == 404){
@@ -16,7 +16,8 @@ async function checkWheather(city){
 
         document.querySelector(".city").innerHTML=data.name;
         document.querySelector(".temp").innerHTML=Math.round(data.main.temp)+ "°C"
-        document.querySelector(".humidity").innerHTML=data.wind.speed+"km/h"
+        document.querySelector(".humidity").innerHTML = data.main.humidity + "%";
+        document.querySelector(".wind").innerHTML = data.wind.speed + " km/h";
 
         if(data.weather[0].main=="Clouds"){
             weatherIcon.src="img/clouds.png";
@@ -40,8 +41,13 @@ async function checkWheather(city){
     }
 }
 
-searchBtn.addEventListener("click",()=>{
-    checkWheather(searchBox.value);
+searchBtn.addEventListener("click", () => {
+  const city = searchBox.value.trim();
+  if (city !== "") {
+    checkWeather(city);
+  } else {
+    alert("Please enter a city name.");
+  }
 });
 
-checkWheather();
+checkWeather("kerala");
